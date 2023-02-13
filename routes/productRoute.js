@@ -1,4 +1,4 @@
-const { getAllProducts, postProduct, removeProduct } = require("../controller/productController");
+const { getAllProducts, postProduct, removeProduct, getProduct } = require("../controller/productController");
 
 const productRoute = require("express").Router();
 
@@ -8,7 +8,7 @@ productRoute.route("/").get(getAllProducts).post(postProduct);
 
 
 //* Update & Delete Product Controller
-productRoute.route("/:id").delete(removeProduct)
+productRoute.route("/:id").get(getProduct).delete(removeProduct)
 
 
 module.exports = productRoute;

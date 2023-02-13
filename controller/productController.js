@@ -1,6 +1,6 @@
 const Product = require("../models/productModel");
 
-const getAllProducts = async (req, res)=> {
+exports.getAllProducts = async (req, res)=> {
     try {
         const product = await Product.find();
         res.status(200).json({product})
@@ -8,7 +8,7 @@ const getAllProducts = async (req, res)=> {
         res.status(401).json({message: error.message})
     }
 }
-const postProduct = async (req, res)=>{
+exports.postProduct = async (req, res)=>{
     try {
         const {name, description, img, price, catagory} = req.body;
         const product = await Product.create({
@@ -25,11 +25,12 @@ const postProduct = async (req, res)=>{
     } 
 };
 
-const removeProduct = async (req, res)=> {
+exports.removeProduct = async (req, res)=> {
 
     try {        
         const id = await req.params.id;
-        const result = await Product.findOneAndRemove({_id:req.params.id})
+        console.log(id);
+        const result = await Product.findByIdAndDelete({_id:id})
         // const result = await Product.deleteOne({_id:id})
 
         res.status(200).json({message:result.message})
@@ -43,9 +44,24 @@ const removeProduct = async (req, res)=> {
 
 }
 
+exports.getProduct = async (req, res)=>{
 
-module.exports = {
-    getAllProducts,
-    postProduct,
-    removeProduct,
-};
+    try {
+        const id = req.params.id;
+
+        const product = await Product.findById({_id:id});
+    
+        if(!product){
+            return res.status(401).json({message: "Something Wents Wrong"})
+        }
+        res.status(200).json({product})
+    } catch (error) {
+        res.status(402).json({message:error.message})
+    }
+}
+
+// module.exports = {
+//     getAllProducts,
+//     postProduct,
+//     removeProduct,
+// };
